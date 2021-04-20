@@ -227,6 +227,11 @@ public class XPathParser {
     }
   }
 
+  /**
+   * 通过给定的数据源配置，创建当前xml配置环境对象
+   * @param inputSource
+   * @return
+   */
   private Document createDocument(InputSource inputSource) {
     // important: this must only be called AFTER common constructor
     try {
@@ -258,12 +263,20 @@ public class XPathParser {
           // NOP
         }
       });
+      // 上面主要是使用 XML 解析引擎的一些配置
+      // 真正创建xml配置环境对象
       return builder.parse(inputSource);
     } catch (Exception e) {
       throw new BuilderException("Error creating document instance.  Cause: " + e, e);
     }
   }
 
+  /**
+   * 普通构造器 保存解析的信息
+   * @param validation 是否需要校验
+   * @param variables 当前系统的配置信息
+   * @param entityResolver 当前配置解析的DTD校验对象
+   */
   private void commonConstructor(boolean validation, Properties variables, EntityResolver entityResolver) {
     this.validation = validation;
     this.entityResolver = entityResolver;

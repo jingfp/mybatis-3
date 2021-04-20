@@ -254,6 +254,10 @@ public class XNode {
     return value == null ? def : Float.valueOf(value);
   }
 
+  /**
+   * 获取当前node的元素子节点 并包装成 xNode对象
+   * @return
+   */
   public List<XNode> getChildren() {
     List<XNode> children = new ArrayList<>();
     NodeList nodeList = node.getChildNodes();

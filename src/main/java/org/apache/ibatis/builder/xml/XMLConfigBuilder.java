@@ -48,6 +48,7 @@ import org.apache.ibatis.transaction.TransactionFactory;
 import org.apache.ibatis.type.JdbcType;
 
 /**
+ * xml配置构建类
  * @author Clinton Begin
  * @author Kazuki Shimizu
  */
@@ -67,6 +68,7 @@ public class XMLConfigBuilder extends BaseBuilder {
   }
 
   public XMLConfigBuilder(Reader reader, String environment, Properties props) {
+    // 通过数据源配置+配置信息，形成xpath文件配置解析器 xpathparser DTD离线解析器
     this(new XPathParser(reader, true, props, new XMLMapperEntityResolver()), environment, props);
   }
 
@@ -91,15 +93,25 @@ public class XMLConfigBuilder extends BaseBuilder {
     this.parser = parser;
   }
 
+  /**
+   * xml真正执行解析，并且对标签进行实际数据的替换（配置进行替换）
+   * @return
+   */
   public Configuration parse() {
     if (parsed) {
       throw new BuilderException("Each XMLConfigBuilder can only be used once.");
     }
+    // 当前设置成为正在解析
     parsed = true;
+    // 开始解析配置文件
     parseConfiguration(parser.evalNode("/configuration"));
     return configuration;
   }
 
+  /**
+   * 解析配置
+   * @param root
+   */
   private void parseConfiguration(XNode root) {
     try {
       // issue #117 read properties first
@@ -219,8 +231,14 @@ public class XMLConfigBuilder extends BaseBuilder {
     }
   }
 
+  /**
+   * 解析属性数据
+   * @param context
+   * @throws Exception
+   */
   private void propertiesElement(XNode context) throws Exception {
     if (context != null) {
+      // 当前node的当前以及子节点的所有属性数据对
       Properties defaults = context.getChildrenAsProperties();
       String resource = context.getStringAttribute("resource");
       String url = context.getStringAttribute("url");
